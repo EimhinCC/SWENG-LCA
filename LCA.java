@@ -7,28 +7,56 @@ import java.util.List;
 class Node {
 	int data;
 	Node [] child;
+	boolean parent1;
+	boolean parent2;
 
 
 	Node(int value) {
 		data = value;
 		child = null;
+		parent1 = false;
+		parent2 = false;
 	}
 	void addNode(int value) {
 		if(child != null) {
-			Node [] temp = new Node [child.length];
+			Node [] temp = new Node [child.length + 1];
 			for (int i = 0; i < child.length; i++) {
 				temp[i] = child[i];
 			}
+			temp[child.length] = new Node(value);
+			return;
+		}
+		//null case
+		else {
+			Node temp[] = {new Node(value)};
+			child = temp;
 		}
 	}
+	
+	void linkNode(Node value) {
+		if(child != null) {
+			Node [] temp = new Node [child.length + 1];
+			for (int i = 0; i < child.length; i++) {
+				temp[i] = child[i];
+			}
+			temp[child.length] = value;
+			return;
+		}
+		//null case
+		else {
+			Node temp[] = {value};
+			child = temp;
+		}
+	}
+	
 }
 
 public class LCA
 {
 
 	Node root;
-	private List<Integer[]> path1 = new ArrayList<>();
-	private List<Integer[]> path2 = new ArrayList<>();
+	private List<List<Integer>> path1 = new ArrayList<>();
+	private List<List<Integer>> path2 = new ArrayList<>();
 
 	// Finds the path from root node to given root of the tree.
 	int findLCA(int n1, int n2) {
@@ -39,59 +67,55 @@ public class LCA
 
 	private int findLCAInternal(Node root, int n1, int n2) {
 
-		if (!findPath(root, n1, path1) || !findPath(root, n2, path2)) {
-			System.out.println((path1.size() > 0) ? "n1 is present" : "n1 is missing");
-			System.out.println((path2.size() > 0) ? "n2 is present" : "n2 is missing");
+		if (findPath(root, n1, n2) != 1) {
+
 			return -1;
 		}
 
-		int i;
-		for (i = 0; i < path1.size() && i < path2.size(); i++) {
-
-			// System.out.println(path1.get(i) + " " + path2.get(i));
-			if (!path1.get(i).equals(path2.get(i)))
-				break;
+		Node Answer = root;
+		
+		while (Answer.parent1 &&  Answer.parent2) {
+			for (int i = 0; i < root.child.length; i++) {
+				if(Answer.child[i].parent1 &&  Answer.child[i].parent2) {
+					Answer = Answer.child[i];
+					break;
+				}
+			}
 		}
 
-		return path1.get(i-1);
+		return Answer.data;
 	}
 
 	// Finds the path from root node to given root of the tree, Stores the
 	// path in a vector path[], returns true if path exists otherwise false
-	private boolean findPath(Node root, int n, List<Integer> path)
+	private int findPath(Node root, int n, int m)
 	{
-
-		boolean found = false;
-
-		// base case
-		if (root == null) {
-			return false;
+		Boolean found1 = false;
+		Boolean found2 = false;
+		if(root.data == n) {
+			found1 =true;
+			return 1;
+		}
+		if(root.data == m) {
+			found2 =true;
+			return 2;
 		}
 
-		// Store this node . The node will be removed if
-		// not in path from root to n.
-		path.add(root.data);
+		for (int i = 0; i < root.child.length; i++) {
+			int j = findPath(root.child[i], n , m);
+			if(j == 1) {
+				root.parent1 = true;
+			}
+			if(j == 2) {
+				root.parent2 = true;
+			}
 
-		if (root.data == n) {
-			found = true;
+		}
+		if (found1 && found2) {
+			return 1;
 		}
 
-		if (root.left != null && findPath(root.left, n, path)) {
-			return true;
-		}
-
-		if (root.right != null && findPath(root.right, n, path)) {
-			return true;
-		}
-
-		// If not present in subtree rooted with root, remove root from
-		// path[] and return false
-		if(found) {
-			return true;
-		}
-		path.remove(path.size()-1);
-
-		return false;
+		return 0;
 	}
 
 	// Driver code
