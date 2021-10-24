@@ -1,8 +1,5 @@
 // Java Program for Lowest Common Ancestor in a Binary Tree
 // A O(n) solution to find LCA of two given values n1 and n2
-import java.util.ArrayList;
-import java.util.List;
-
 // A Binary Tree node
 class Node {
 	int data;
@@ -24,6 +21,7 @@ class Node {
 				temp[i] = child[i];
 			}
 			temp[child.length] = new Node(value);
+			child = temp;
 			return;
 		}
 		//null case
@@ -32,7 +30,7 @@ class Node {
 			child = temp;
 		}
 	}
-	
+
 	void linkNode(Node value) {
 		if(child != null) {
 			Node [] temp = new Node [child.length + 1];
@@ -40,6 +38,7 @@ class Node {
 				temp[i] = child[i];
 			}
 			temp[child.length] = value;
+			child = temp;
 			return;
 		}
 		//null case
@@ -48,37 +47,38 @@ class Node {
 			child = temp;
 		}
 	}
-	
+
 }
 
 public class LCA
 {
 
 	Node root;
-	private List<List<Integer>> path1 = new ArrayList<>();
-	private List<List<Integer>> path2 = new ArrayList<>();
 
 	// Finds the path from root node to given root of the tree.
 	int findLCA(int n1, int n2) {
-		path1.clear();
-		path2.clear();
+		if (root == null) {
+			return -1;
+		}
 		return findLCAInternal(root, n1, n2);
 	}
 
 	private int findLCAInternal(Node root, int n1, int n2) {
 
-		if (findPath(root, n1, n2) != 1) {
-
+		if (findPath(root, n1, n2) != 3) {
+			System.out.println(findPath(root, n1, n2));
 			return -1;
 		}
 
 		Node Answer = root;
-		
+
 		while (Answer.parent1 &&  Answer.parent2) {
-			for (int i = 0; i < root.child.length; i++) {
-				if(Answer.child[i].parent1 &&  Answer.child[i].parent2) {
-					Answer = Answer.child[i];
-					break;
+			if (root.child!= null) {
+				for (int i = 0; i < root.child.length; i++) {
+					if(Answer.child[i].parent1 &&  Answer.child[i].parent2) {
+						Answer = Answer.child[i];
+						break;
+					}
 				}
 			}
 		}
@@ -100,20 +100,36 @@ public class LCA
 			found2 =true;
 			return 2;
 		}
+		if (root.child!= null) {
+			for (int i = 0; i < root.child.length; i++) {
+				int j = findPath(root.child[i], n , m);
+				if(j == 1) {
+					found1 =true;
+					root.parent1 = true;
+				}
+				if(j == 2) {
+					found2 =true;
+					root.parent2 = true;
+				}
+				if(j == 3) {
+					found1 =true;
+					found2 =true;
+					root.parent1 = true;
+					root.parent2 = true;
+				}
 
-		for (int i = 0; i < root.child.length; i++) {
-			int j = findPath(root.child[i], n , m);
-			if(j == 1) {
-				root.parent1 = true;
 			}
-			if(j == 2) {
-				root.parent2 = true;
-			}
-
 		}
 		if (found1 && found2) {
+			return 3;
+		}
+		if (found1) {
 			return 1;
 		}
+		if (found2) {
+			return 2;
+		}
+
 
 		return 0;
 	}

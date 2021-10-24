@@ -13,12 +13,12 @@ class DAG_LCATest2 {
 		final void twoRoots() {
 			LCA tree = new LCA();
 			tree.root = new Node(1);
-			tree.root.left = new Node(2);
-			tree.root.right = new Node(3);
-			tree.root.left.left = new Node(4);
-			tree.root.right.left = tree.root.left.left;
-			tree.root.right.right =  new Node(5);
-			tree.root.left.right = new Node(6);
+			tree.root.addNode(2);
+			tree.root.addNode(3);
+			tree.root.child[0].addNode(4);
+			tree.root.child[0].addNode(5);
+			tree.root.child[1].addNode(6);
+			tree.root.child[1].linkNode(tree.root.child[0].child[0]);
 			assertEquals("expect the first root", 2, tree.findLCA(4,6));        
 			assertEquals("expect the second root", 3, tree.findLCA(4,5));    
 		}
