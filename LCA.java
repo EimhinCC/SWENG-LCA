@@ -93,13 +93,15 @@ public class LCA
 	{
 		Boolean found1 = false;
 		Boolean found2 = false;
+		
+		root.parent1 = false;
+		root.parent2 = false;
+		
 		if(root.data == n) {
 			found1 =true;
-			return 1;
 		}
 		if(root.data == m) {
 			found2 =true;
-			return 2;
 		}
 		if (root.child!= null) {
 			for (int i = 0; i < root.child.length; i++) {
