@@ -19,8 +19,8 @@ class DAG_LCATest2 {
 			tree.root.child[0].addNode(5);
 			tree.root.child[1].addNode(6);
 			tree.root.child[1].linkNode(tree.root.child[0].child[0]);
-			assertEquals("expect the first root", 2, tree.findLCA(4,6));        
-			assertEquals("expect the second root", 3, tree.findLCA(4,5));    
+			assertEquals("expect the first root", 3, tree.findLCA(4,6));        
+			assertEquals("expect the second root", 2, tree.findLCA(4,5));    
 		}
 		
 }

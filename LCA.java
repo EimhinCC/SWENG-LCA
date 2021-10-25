@@ -70,20 +70,19 @@ public class LCA
 			return -1;
 		}
 
-		Node Answer = root;
+		Node answer = root;
 
-		while (Answer.parent1 &&  Answer.parent2) {
 			if (root.child!= null) {
-				for (int i = 0; i < root.child.length; i++) {
-					if(Answer.child[i].parent1 &&  Answer.child[i].parent2) {
-						Answer = Answer.child[i];
-						break;
+				for (int i = 0; i < answer.child.length; i++) {
+					if(answer.child[i].parent1 &&  answer.child[i].parent2) {
+						answer = answer.child[i];
 					}
+					
 				}
+				
 			}
-		}
 
-		return Answer.data;
+		return answer.data;
 	}
 
 	// Finds the path from root node to given root of the tree, Stores the
