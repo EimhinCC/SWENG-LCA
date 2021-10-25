@@ -76,6 +76,8 @@ public class LCA
 				for (int i = 0; i < answer.child.length; i++) {
 					if(answer.child[i].parent1 &&  answer.child[i].parent2) {
 						answer = answer.child[i];
+						//reset the for loop
+						i= -1;
 					}
 					
 				}
