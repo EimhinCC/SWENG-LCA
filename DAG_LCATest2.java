@@ -35,4 +35,17 @@ class DAG_LCATest2 {
 			assertEquals("expect the parent of node '4' ", 3, tree.findLCA(6,4));        
 			assertEquals("expect the parent of node '4'", 3, tree.findLCA(4,5));    
 		}
+		@Test
+		final void linkesAtDiffLevels() {
+			LCA tree = new LCA();
+			tree.root = new Node(1);
+			tree.root.addNode(2);
+			tree.root.addNode(3);
+			tree.root.child[0].addNode(4);
+			tree.root.child[0].addNode(5);
+			tree.root.child[1].addNode(6);
+			tree.root.child[1].child[0].linkNode(tree.root.child[0].child[0]);
+			assertEquals("expect the parent of node '4' ", 3, tree.findLCA(6,4));        
+    
+		}
 }
